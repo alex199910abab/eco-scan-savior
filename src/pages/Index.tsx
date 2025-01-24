@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Sparkles } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Camera, Sparkles, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CameraComponent from "@/components/Camera";
 import MaterialDetection from "@/components/MaterialDetection";
@@ -9,6 +9,7 @@ const Index = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [material, setMaterial] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCapture = (imageData: string) => {
     setCapturedImage(imageData);
@@ -18,6 +19,23 @@ const Index = () => {
   const handleReset = () => {
     setCapturedImage(null);
     setMaterial(null);
+  };
+
+  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      alert('Please upload an image file');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageData = e.target?.result as string;
+      setCapturedImage(imageData);
+    };
+    reader.readAsDataURL(file);
   };
 
   return (
@@ -32,27 +50,31 @@ const Index = () => {
 
         {!capturedImage && !showCamera && (
           <div className="space-y-4 animate-fade-up">
-            <Button
-              onClick={() => setShowCamera(true)}
-              className="w-full h-16 bg-eco-primary hover:bg-eco-dark text-white text-lg"
-            >
-              <span className="flex items-center justify-center">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-2 h-6 w-6"
-                >
-                  <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z" />
-                  <circle cx="12" cy="13" r="3" />
-                </svg>
-                Scan Item
-              </span>
-            </Button>
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                onClick={() => setShowCamera(true)}
+                className="h-16 bg-eco-primary hover:bg-eco-dark text-white text-lg"
+              >
+                <Camera className="mr-2 h-6 w-6" />
+                Camera
+              </Button>
+
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                className="h-16 bg-eco-primary hover:bg-eco-dark text-white text-lg"
+              >
+                <Upload className="mr-2 h-6 w-6" />
+                Upload
+              </Button>
+              
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+            </div>
             
             <div className="flex items-center justify-center text-sm text-gray-500">
               <Sparkles className="h-4 w-4 mr-2" />
