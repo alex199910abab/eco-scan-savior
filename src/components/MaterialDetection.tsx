@@ -7,10 +7,13 @@ interface MaterialDetectionProps {
   onResult: (material: string) => void;
 }
 
+// Define proper types for the classification results
 interface ClassificationResult {
   label: string;
   score: number;
 }
+
+type ClassificationOutput = ClassificationResult[] | ClassificationResult;
 
 const MaterialDetection: React.FC<MaterialDetectionProps> = ({ imageData, onResult }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
@@ -25,7 +28,7 @@ const MaterialDetection: React.FC<MaterialDetectionProps> = ({ imageData, onResu
           { device: "webgpu" }
         );
         
-        const results = await classifier(imageData);
+        const results = await classifier(imageData) as ClassificationOutput;
         console.log("Classification results:", results);
         
         // Get the top result
