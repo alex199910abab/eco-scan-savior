@@ -7,6 +7,11 @@ interface MaterialDetectionProps {
   onResult: (material: string) => void;
 }
 
+interface ClassificationResult {
+  label: string;
+  score: number;
+}
+
 const MaterialDetection: React.FC<MaterialDetectionProps> = ({ imageData, onResult }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
 
@@ -19,8 +24,8 @@ const MaterialDetection: React.FC<MaterialDetectionProps> = ({ imageData, onResu
           { device: "webgpu" }
         );
         
-        const results = await classifier(imageData);
-        const material = getMaterialFromLabel(results[0].score > 0.5 ? results[0].label : "unknown");
+        const results = await classifier(imageData) as ClassificationResult[];
+        const material = getMaterialFromLabel(results[0]?.score > 0.5 ? results[0]?.label : "unknown");
         onResult(material);
       } catch (error) {
         console.error("Error analyzing image:", error);
