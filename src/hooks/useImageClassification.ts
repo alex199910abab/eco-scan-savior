@@ -12,7 +12,7 @@ export const useImageClassification = (imageData: string, onResult: (material: s
         const classifier = await pipeline(
           "image-classification",
           "microsoft/resnet-50",
-          { device: "webgpu" }
+          { device: "wasm" }
         );
         
         const results = await classifier(imageData) as ClassificationOutput;
