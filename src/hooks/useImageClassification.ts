@@ -11,7 +11,7 @@ export const useImageClassification = (imageData: string, onResult: (material: s
       try {
         const classifier = await pipeline(
           "image-classification",
-          "microsoft/resnet-50",
+          "Xenova/resnet-50",
           { device: "wasm" }
         );
         
