@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { pipeline } from "@huggingface/transformers";
 import { Loader2 } from "lucide-react";
 
@@ -20,7 +20,7 @@ const MaterialDetection: React.FC<MaterialDetectionProps> = ({ imageData, onResu
         );
         
         const results = await classifier(imageData);
-        const material = getMaterialFromLabel(results[0].label);
+        const material = getMaterialFromLabel(results[0].score > 0.5 ? results[0].label : "unknown");
         onResult(material);
       } catch (error) {
         console.error("Error analyzing image:", error);

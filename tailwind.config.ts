@@ -19,6 +19,7 @@ export default {
     },
     extend: {
       colors: {
+        border: "hsl(var(--border))",
         eco: {
           primary: "#4CAF50",
           secondary: "#81C784",

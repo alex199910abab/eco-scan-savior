@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Camera as CameraIcon, FlipCamera, X } from "lucide-react";
+import { Camera as CameraIcon, RotateCw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface CameraProps {
@@ -89,7 +89,7 @@ const Camera: React.FC<CameraProps> = ({ onCapture, onClose }) => {
             className="bg-black/50 text-white hover:bg-black/70"
             onClick={switchCamera}
           >
-            <FlipCamera className="h-6 w-6" />
+            <RotateCw className="h-6 w-6" />
           </Button>
           
           <Button
