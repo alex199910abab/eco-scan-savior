@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import { Camera, Sparkles, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
 import CameraComponent from "@/components/Camera";
 import MaterialDetection from "@/components/MaterialDetection";
 import Results from "@/components/Results";
@@ -47,11 +46,6 @@ const Index = () => {
           <p className="text-gray-600 mb-4">
             Scan your waste items to learn how to dispose of them properly
           </p>
-          <Link to="/materials">
-            <Button variant="outline" className="mb-6">
-              View Materials Guide
-            </Button>
-          </Link>
         </div>
 
         {!capturedImage && !showCamera && (
