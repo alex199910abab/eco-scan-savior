@@ -5,6 +5,7 @@ import CameraComponent from "@/components/Camera";
 import MaterialDetection from "@/components/MaterialDetection";
 import Results from "@/components/Results";
 import RecyclingQuestionnaire, { QuestionnaireAnswers } from "@/components/RecyclingQuestionnaire";
+import History from "@/components/History";
 
 const Index = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -43,12 +44,27 @@ const Index = () => {
 
   const handleQuestionnaireComplete = (answers: QuestionnaireAnswers) => {
     setQuestionnaireAnswers(answers);
+    
+    // Save to history when questionnaire is completed
+    if (capturedImage && material) {
+      const historyItem = {
+        id: Date.now().toString(),
+        image: capturedImage,
+        material: material,
+        timestamp: Date.now(),
+      };
+      
+      const storedHistory = localStorage.getItem("scanHistory");
+      const history = storedHistory ? JSON.parse(storedHistory) : [];
+      localStorage.setItem("scanHistory", JSON.stringify([historyItem, ...history].slice(0, 10)));
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto p-6">
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 relative">
+          <History />
           <h1 className="text-4xl font-bold text-gray-900 mb-2">EcoSort</h1>
           <p className="text-gray-600 mb-4">
             Scan your waste items to learn how to dispose of them properly
