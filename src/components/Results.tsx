@@ -54,6 +54,18 @@ const Results: React.FC<ResultsProps> = ({ material, questionnaireAnswers, onRes
     if (questionnaireAnswers.condition === "damaged") {
       instructions.push("Damaged items might not be recyclable. Consider general waste if severely damaged.");
     }
+
+    if (questionnaireAnswers.size === "large") {
+      instructions.push("Large items may need to be taken to a recycling center.");
+    }
+
+    if (questionnaireAnswers.hasLabels === "yes") {
+      instructions.push("Remove any labels or stickers before recycling if possible.");
+    }
+
+    if (questionnaireAnswers.hasMultipleMaterials === "yes") {
+      instructions.push("Try to separate different materials before recycling.");
+    }
     
     return instructions.join(" ");
   };

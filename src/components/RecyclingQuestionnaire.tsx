@@ -13,6 +13,9 @@ export interface QuestionnaireAnswers {
   mainMaterial: string;
   cleanliness: "clean" | "dirty";
   condition: "intact" | "damaged";
+  size: "small" | "medium" | "large";
+  hasLabels: "yes" | "no";
+  hasMultipleMaterials: "yes" | "no";
 }
 
 const RecyclingQuestionnaire: React.FC<QuestionnaireProps> = ({
@@ -23,6 +26,9 @@ const RecyclingQuestionnaire: React.FC<QuestionnaireProps> = ({
     mainMaterial: detectedMaterial,
     cleanliness: "clean",
     condition: "intact",
+    size: "medium",
+    hasLabels: "no",
+    hasMultipleMaterials: "no",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -102,6 +108,79 @@ const RecyclingQuestionnaire: React.FC<QuestionnaireProps> = ({
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="damaged" id="damaged" />
                 <Label htmlFor="damaged">Damaged/Poor condition</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <div className="space-y-2">
+            <Label>What's the size of the item?</Label>
+            <RadioGroup
+              value={answers.size}
+              onValueChange={(value) =>
+                setAnswers({
+                  ...answers,
+                  size: value as "small" | "medium" | "large",
+                })
+              }
+              className="flex flex-col space-y-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="small" id="small" />
+                <Label htmlFor="small">Small (fits in one hand)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="medium" id="medium" />
+                <Label htmlFor="medium">Medium (two hands)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="large" id="large" />
+                <Label htmlFor="large">Large (needs lifting)</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Does the item have any labels or stickers?</Label>
+            <RadioGroup
+              value={answers.hasLabels}
+              onValueChange={(value) =>
+                setAnswers({
+                  ...answers,
+                  hasLabels: value as "yes" | "no",
+                })
+              }
+              className="flex flex-col space-y-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="yes" id="labels-yes" />
+                <Label htmlFor="labels-yes">Yes</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no" id="labels-no" />
+                <Label htmlFor="labels-no">No</Label>
+              </div>
+            </RadioGroup>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Is the item made of multiple materials?</Label>
+            <RadioGroup
+              value={answers.hasMultipleMaterials}
+              onValueChange={(value) =>
+                setAnswers({
+                  ...answers,
+                  hasMultipleMaterials: value as "yes" | "no",
+                })
+              }
+              className="flex flex-col space-y-2"
+            >
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="yes" id="multiple-yes" />
+                <Label htmlFor="multiple-yes">Yes (e.g., plastic and metal)</Label>
+              </div>
+              <div className="flex items-center space-x-2">
+                <RadioGroupItem value="no" id="multiple-no" />
+                <Label htmlFor="multiple-no">No, single material</Label>
               </div>
             </RadioGroup>
           </div>
