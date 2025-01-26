@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import CameraComponent from "@/components/Camera";
 import MaterialDetection from "@/components/MaterialDetection";
 import Results from "@/components/Results";
+import RecyclingQuestionnaire, { QuestionnaireAnswers } from "@/components/RecyclingQuestionnaire";
 
 const Index = () => {
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [showCamera, setShowCamera] = useState(false);
   const [material, setMaterial] = useState<string | null>(null);
+  const [questionnaireAnswers, setQuestionnaireAnswers] = useState<QuestionnaireAnswers | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCapture = (imageData: string) => {
@@ -19,6 +21,7 @@ const Index = () => {
   const handleReset = () => {
     setCapturedImage(null);
     setMaterial(null);
+    setQuestionnaireAnswers(null);
   };
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +39,10 @@ const Index = () => {
       setCapturedImage(imageData);
     };
     reader.readAsDataURL(file);
+  };
+
+  const handleQuestionnaireComplete = (answers: QuestionnaireAnswers) => {
+    setQuestionnaireAnswers(answers);
   };
 
   return (
@@ -97,9 +104,17 @@ const Index = () => {
           />
         )}
 
-        {material && (
+        {material && !questionnaireAnswers && (
+          <RecyclingQuestionnaire
+            detectedMaterial={material}
+            onComplete={handleQuestionnaireComplete}
+          />
+        )}
+
+        {material && questionnaireAnswers && (
           <Results
             material={material}
+            questionnaireAnswers={questionnaireAnswers}
             onReset={handleReset}
           />
         )}

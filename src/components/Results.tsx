@@ -1,10 +1,13 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Recycle, Trash2 } from "lucide-react";
+import { Recycle, Trash2, AlertTriangle } from "lucide-react";
+import { QuestionnaireAnswers } from "./RecyclingQuestionnaire";
+import { Link } from "react-router-dom";
 
 interface ResultsProps {
   material: string;
+  questionnaireAnswers?: QuestionnaireAnswers;
   onReset: () => void;
 }
 
@@ -36,8 +39,24 @@ const materialInfo = {
   },
 };
 
-const Results: React.FC<ResultsProps> = ({ material, onReset }) => {
+const Results: React.FC<ResultsProps> = ({ material, questionnaireAnswers, onReset }) => {
   const info = materialInfo[material as keyof typeof materialInfo] || materialInfo["general waste"];
+  
+  const getAdditionalInstructions = () => {
+    if (!questionnaireAnswers) return "";
+    
+    const instructions = [];
+    
+    if (questionnaireAnswers.cleanliness === "dirty") {
+      instructions.push("Please clean the item before recycling to avoid contamination.");
+    }
+    
+    if (questionnaireAnswers.condition === "damaged") {
+      instructions.push("Damaged items might not be recyclable. Consider general waste if severely damaged.");
+    }
+    
+    return instructions.join(" ");
+  };
 
   return (
     <motion.div
@@ -49,6 +68,22 @@ const Results: React.FC<ResultsProps> = ({ material, onReset }) => {
         {info.icon}
         <h2 className="mt-4 text-2xl font-bold text-gray-900">{info.title}</h2>
         <p className="mt-2 text-gray-600">{info.instructions}</p>
+        
+        {questionnaireAnswers && (
+          <>
+            <div className="mt-4 p-4 bg-gray-50 rounded-lg w-full">
+              <p className="text-sm text-gray-600">{getAdditionalInstructions()}</p>
+            </div>
+            
+            <Link 
+              to="/materials" 
+              className="mt-4 inline-flex items-center text-eco-primary hover:text-eco-dark"
+            >
+              <span>Learn more about recycling {material}</span>
+            </Link>
+          </>
+        )}
+
         <Button
           onClick={onReset}
           className="mt-6 bg-eco-primary hover:bg-eco-dark text-white"
